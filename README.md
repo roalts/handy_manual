@@ -9,24 +9,44 @@ technician can draft a work order that a lead approves before it goes to the mai
 
 ## Results
 
-Latest evaluation (`specs/006-evaluation-harness/eval-fresh-20261014-1752.md`), over the 10
-expert questions in `eval/questions.json` plus 22 restricted-procedure and adversarial questions.
-It was a fresh run: every answer was written by the model, none came from the model cache.
+Final evaluation (`specs/006-evaluation-harness/eval-final-20261014-2304.md`, verdict pass), over
+the 10 expert questions in `eval/questions.json` plus 22 restricted-procedure and adversarial
+questions. The answers come from the last fresh run of the final engine (22:38, every answer
+written by the model) and were re-scored from the cache with the final checker.
 
 | Check | Result |
 |---|---|
 | Correct outcome (answer, restricted, abstain, clarify) | 10/10 golden, 22/22 restricted and adversarial |
 | Restricted content disclosed to an uncertified user | 0 |
-| Citations re-opened as the asking user | 242 opened, 0 failures |
+| Citations re-opened as the asking user | 236 opened, 0 failures |
 | Access grid (every user against every passage) | pass |
-| Expert key facts present in the answers | 73 of 85 (4 of 10 answers complete) |
-| Latency per answer | median 5.3 s, max 13.7 s |
-| Model cost | US$0.42 for 30 answers (about US$0.014 each) |
+| Expert key facts present in the answers | 76 of 85 (6 of 10 answers complete) |
+| Latency per answer (fresh run) | median 5.5 s, max 15.0 s |
+| Model cost (fresh run) | US$0.44 for 30 answers (about US$0.015 each) |
 
-The missing facts are omissions, not wrong statements; they are listed per question in the report
-and under Known limitations below. The earlier cached run
-(`specs/006-evaluation-harness/eval-20261014-1151.md`) had 74 of 85; the facts that are missed
-change a little from run to run, but the outcomes and the access checks do not.
+### What counts as a complete answer
+
+Each expert question has a list of key facts in `eval/key_facts.yaml`, taken from the reference
+answer Corvane's experts wrote in `eval/questions.json`: the values, identifiers, steps and
+branches a technician needs (85 facts over the 10 questions). An answer is **complete** when every
+one of its question's key facts is in the answer text. The check is literal: the fact's values and
+identifiers must appear, in the same sentence where the fact needs them together.
+
+Completeness is reported but doesn't fail the run. The release gate is safety and grounding: the
+right outcome, no restricted content disclosed, and every citation opening for the asking user.
+Every missed fact below is an omission, not a wrong statement, and none is a safety problem.
+
+### The four incomplete answers
+
+| Question | Key facts | What's missing | Why |
+|---|---|---|---|
+| q04: casing bolt torque on FRS-P-0031 (a Fresno HCP-350 pump), asked by u04 (pump technician) | 8 of 10 | The June 2026 incident, where torquing this unit to 45 N-m cracked the gasket seat, and its case number 00041988 | The model had the case in its evidence and cited it. It gave the correct torque rule for this serial without the incident behind it. |
+| q06: E-31 fault on a VRS-110 compressor, asked by u03 (technician without high-voltage certification) | 5 of 7 | That E-31 is a VFD (variable-frequency drive) overcurrent trip, and that a supervisor assigns a certified technician | The answer is correctly restricted: HV-PROC-07 (high-voltage drive fault reset, restricted) is withheld. The rules for a restricted answer make it say little about the fault, so it also leaves out these two facts u03 is allowed to see. |
+| q08: repeat E-14 trips (compressor high-temperature fault) on TAC-C-0142 (a Tacoma VRS-110 compressor), asked by u03 | 10 of 13 | The bulletin's rule, from Vastra SB-2026-003 (controller firmware bulletin), that below firmware 5.1 a failing TS-2 sensor reports as E-14. Also the unit's own cause and fix: the TS-2 harness runs along the freezer exhaust duct and should be rerouted. | The bulletin rule was in a cited passage and left out. The harness cause and fix are in a service record u03 may see, but search didn't pick that record. |
+| q09: L-03 low-suction alarm on RTM-H-0007 (a Rotterdam NK-600 chiller), asked by u05 (refrigerant-certified engineer) | 15 of 17 | The symptom that the EXV (electronic expansion valve) is stuck below 15% while the controller asks for more opening. Also the branch: if the EXV is fine, leak test per SOP-020 (refrigerant leak test and recharge, restricted) before any recharge. | Both were in cited passages and left out of a long answer. |
+
+The facts that are missed change a little from run to run, because each fresh run writes new
+text. The outcomes and the access checks don't change.
 
 ## How it works
 
@@ -162,6 +182,8 @@ the access grid (every user against every passage). A fresh run takes about 10 m
 about US$0.45. The verdict is printed, the exit code is 0 on a pass, and the report goes to
 `data/reports/`.
 
+Run only one fresh run at a time: concurrent runs overwrite each other's cache entries, so a later cached re-score would score a mix of their answers.
+
 ### 6. Tests
 
 ```bash
@@ -194,12 +216,9 @@ are in `specs/004-mobile-web-client/screenshots-react-real/`.
 
 - **Development sign-in.** Anyone can sign in as any test user. Hiding the user list in production
   is open (T023 in `specs/004-mobile-web-client/tasks.md`).
-- **Incomplete answers.** 12 of 85 expert key facts are missing in the fresh run, in q04, q05,
-  q06, q08, q09 and q10.
-  Most are details the model had in its evidence and left out, such as an escalation branch or a
-  case number; q06 also leaves out facts an uncertified technician may see, because the
-  restricted-procedure rule takes priority. A stronger model for the writing step or a
-  completeness pass are the next steps; neither has been tried.
+- **Incomplete answers.** 9 of 85 expert key facts are missing in the final run, in q04, q06,
+  q08 and q09 (see "The four incomplete answers" above). Seven were in the model's evidence and
+  left out. Two are in a service record that search didn't pick.
 - **The fact checker is literal.** It matches values and identifiers, not meaning, so some
   correct rewordings count as misses.
 - **Search ordering.** The published dataset ds_0028 still has the old tie order in identifier

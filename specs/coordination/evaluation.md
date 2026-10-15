@@ -1,9 +1,9 @@
 # Evaluation harness (006) — evaluation harness agent
 
 **State**: done
-**Current task**: none; latest report below ("Final report: both misreadings fixed; the cached
-re-score scored the 22:38 answers, not the 22:35 ones")
-**Last updated**: 2026-10-14 22:54
+**Current task**: none; latest report below ("Final report: decimal comma read; the cached
+re-score of the 22:38 answers passes the gate")
+**Last updated**: 2026-10-14 23:20
 
 ## 2026-10-13 22:05 — Started; read the protocol, the brief and the other files
 
@@ -1050,3 +1050,104 @@ Tests in `tests/eval/test_harness.py`:
    - one new fresh run, which would produce new answers with their own variance.
 2. **Concurrent fresh runs overwrite each other's cache entries.** If the README tells the user
    to re-score from cache, only one fresh run should be made before it.
+
+## 2026-10-14 23:20 — Final report: decimal comma read; the cached re-score of the 22:38 answers passes the gate
+
+STATUS (to: orchestrator)
+
+Answers the DECISION and REQUEST (to: evaluation harness) in `orchestrator.md`, "2026-10-14
+23:10 — Decimal comma accepted; final re-score (user decision)".
+
+**Outcome**
+
+- The gate passes with exit code 0 and 0 release-blocking failures. The run scored the 22:38
+  answers from the cache, which the decision names as the final run.
+- Report: `specs/006-evaluation-harness/eval-final-20261014-2304.md`, copied from
+  `data/reports/eval-20261014-2304.md`.
+- Compared with the 22:47 re-score of the same answers, exactly one verdict changed, as
+  `python -m copilot_eval compare` shows. The q09 sentence 5 citation failure ("3.3 bar") is
+  gone. q09 is L-03, the chiller low-suction alarm, on RTM-H-0007, a Rotterdam NK-600 chiller,
+  asked by u05, the refrigerant-certified engineer. Every other case has the same verdict,
+  facts and exemptions as before.
+- Engine: `answer-generate-6` (prompt version 6 of generate), `answer-regenerate-4` (prompt
+  version 4 of regenerate), `answer-sufficiency-1` and `answer-followup-2`, on ds_0028 (dataset
+  version 28). The completeness pass was off (`ANSWER_COMPLETE` unset).
+
+**The reading** (`src/copilot_eval/textnorm.py`, `decimal_comma`; used in
+`citations.check_values`)
+
+- In cited passage text only, a comma between digits, with 1 to 3 digits after it, is read as a
+  decimal point. "zuigdruk c2 3,3 bar" (circuit 2 suction pressure) in the Servio export
+  passage `p_ev_1ada8c87c63aac75` (Servio work order 2600357, the 2026-02-25 follow-up
+  inspection) now grounds "3.3 bar".
+- Thousands separators come first, unchanged: `norm` already turns "4,000 h" into "4000 h", so
+  it can never become "4.0 h". "1,600 px" works the same way.
+- Digits that are part of a list ("1,2,3") or a slash date ("7/28,8/30") are left alone.
+- The reading is added next to the passage text rather than replacing it, so nothing that was
+  grounded before stops being grounded. Answer text and key-fact matching are unchanged.
+- Tests (`tests/eval/test_harness.py`):
+  - `test_decimal_comma_in_a_passage_is_a_decimal_point`: "3,3 bar" grounds "3.3 bar" and an
+    answer that writes "3,3 bar", but not "3.4 bar".
+  - `test_thousands_separator_is_not_a_decimal_comma`: "4,000 h" grounds "4000 h" and
+    "4,000 h", but not "4.0 h"; "1,600 px" grounds "1600 px".
+  - `test_decimal_comma_leaves_lists_and_dates_alone`.
+
+**A side effect for the user to know about**
+
+- One seeded trial in SC-003 (seeded corruptions caught) no longer counts as a corruption.
+  - In q02 (HCP-200 pump impeller clearance), sentence 2 has "3.1", and the trial changes it
+    to "3.2".
+  - The cited HCP-200 datasheet passage (`p_7a891cda95ff12c33c8caaa5`) has "NPSH required 3,2 m".
+    So under the new reading, a bare "3.2" is in the source.
+- The trial generator already skips corruptions that are present in the source. I made it read
+  the source the same way the checker does: one line in `tests/eval/test_seeded.py`. The trials
+  still catch 100%, now 132 of 132 instead of 133 of 133.
+- The underlying limit is old: a bare number without a unit is grounded wherever it appears in
+  a cited passage. The decimal comma adds a few more such numbers in German and Dutch passages.
+  Values with a unit are still matched with their unit.
+
+**The re-score**
+
+- Command: `env -u ANSWER_COMPLETE uv run python -m copilot_eval run --budget 0.10`.
+  - Not `--fresh`.
+  - It ran on the harness's own instance on port 8020, which I checked was free first. Port
+    8000 was not touched. No other evaluation was running.
+  - The access grid was included.
+- Cache: all 30 of 30 asks came from the cache. `data/usage.jsonl` had 2165 rows before and
+  after, so there were 0 model calls and no uncached embeddings.
+- Results:
+
+  | Check | Result |
+  |---|---|
+  | Verdict | PASS, exit code 0 |
+  | Golden outcomes | 10 of 10 |
+  | Restricted pair and adversarial outcomes | 22 of 22 |
+  | Disclosures | 0 |
+  | Disclosure exemptions | 4, all SOP-020 (chiller leak test and recharge, restricted), the same as at 22:47 |
+  | Citations opened as the asking user | 236, 0 failures |
+  | Evidence labels | 0 |
+  | Golden completeness | 6 of 10, 76 of 85 key facts |
+  | Access grid | passes (145 s) |
+  | Duration | 10 s for 30 asks plus 146 s for the grid |
+
+**Verification**
+
+- `uv run ruff check src tests`: clean.
+- `uv run pytest -m "not hosted"`: 426 passed, 8 deselected. That includes `tests/eval`, with
+  the seeded trials against the real database and none skipped.
+
+**Spend**: US$0.
+
+**Files changed**
+
+- `src/copilot_eval/textnorm.py` and `src/copilot_eval/citations.py`: the reading.
+- `tests/eval/test_harness.py`: three tests.
+- `tests/eval/test_seeded.py`: the trial generator reads the source like the checker.
+- `specs/006-evaluation-harness/tasks.md`: T032 (task: the decimal comma) and T033 (task: this
+  re-score), both done.
+- `specs/006-evaluation-harness/eval-final-20261014-2304.md`: the report.
+- `README.md`, "5. Evaluate", one line: "Run only one fresh run at a time: concurrent runs
+  overwrite each other's cache entries, so a later cached re-score would score a mix of their
+  answers." This is outside my folders, as the request asked.
+- Run artefacts in `data/`, which doesn't ship: `data/reports/eval-20261014-2304.{md,json}` and
+  `data/tmp/eval-rescore2.log`.

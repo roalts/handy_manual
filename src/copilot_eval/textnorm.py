@@ -33,6 +33,17 @@ def norm(text: str) -> str:
     return _SPACE.sub(" ", s).strip()
 
 
+_DECIMAL_COMMA = re.compile(r"(?<![\d/.,])(\d+),(\d{1,3})(?![\d,/])")
+
+
+def decimal_comma(normed: str) -> str:
+    """A decimal comma read as a decimal point ("3,3 bar" -> "3.3 bar"), for normalized passage
+    text only (user decision, 2026-10-14 23:10). `norm` has already removed thousands
+    separators, so "4,000 h" is "4000 h" here and never becomes "4.0 h"; digits that are part of
+    a list ("1,2,3") or a date ("7/28,8/30") are left alone."""
+    return _DECIMAL_COMMA.sub(r"\1.\2", normed)
+
+
 def contains(haystack_norm: str, needle: str) -> bool:
     """`needle` (raw) occurs in normalized `haystack_norm` as a whole token sequence: "8.3" does
     not match "18.3" or "8.35", "TP1" does not match "TP10". A word needle also matches its

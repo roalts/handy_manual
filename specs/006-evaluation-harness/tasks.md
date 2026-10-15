@@ -74,6 +74,9 @@ description: "Tasks for 006 evaluation harness"
 - [x] T030 Citation value check: the article "a" after a number is not amperes ("5.0 a failing"), and a plain word joined to a dotted number is dropped ("under-5.1"); tests in `tests/eval/test_harness.py` (REQUEST 2026-10-14 22:50)
 - [x] T031 One cached re-score with the grid, report copied to `specs/006-evaluation-harness/eval-final-20261014-2247.md` (it scored the 22:38 run's answers, not the 22:35 ones; see `specs/coordination/evaluation.md`, 22:54)
 
+- [x] T032 Citation value check: a decimal comma in a cited passage counts as a decimal point ("3,3 bar" grounds "3.3 bar"), after thousands separators are removed, never for lists or dates; tests in `tests/eval/test_harness.py` (DECISION 2026-10-14 23:10)
+- [x] T033 Cached re-score with the grid, report copied to `specs/006-evaluation-harness/eval-final-20261014-2304.md`; README line on one fresh run at a time
+
 ## Not done
 
 - FR-003 paraphrase judging with the fast model: not needed; every key fact is matched by

@@ -10,7 +10,7 @@ import re
 from dataclasses import dataclass
 
 from copilot_contracts import AnswerResponse
-from copilot_eval.textnorm import contains, norm
+from copilot_eval.textnorm import contains, decimal_comma, norm
 
 # A token holding a digit: 38, 0.38, 6000, 63-1180, E-31, P9.01, TP1, HCP350-241187,
 # 2026-03-12, NK-C25-14, 00041988. A hyphenated word after it is not part of it ("6000-hour",
@@ -115,6 +115,7 @@ def check_values(resp: AnswerResponse, sources: dict[str, dict],
     texts = {pid: norm(f"{b.get('title') or ''} rev {b.get('revision') or ''} "
                        f"{b.get('issue_date') or ''}\n{b.get('text_original') or ''}\n"
                        f"{b.get('text_en') or ''}") for pid, b in sources.items()}
+    texts = {pid: t if (d := decimal_comma(t)) == t else f"{t}\n{d}" for pid, t in texts.items()}
     asset = asset_text(resp) + "\n" + " ".join(
         v for v in values(question) if re.search(r"[a-z]", v) and " " not in v)
     items = [(f"sentence {i}", "".join(g.text for g in s.segments if g.kind == "text"),

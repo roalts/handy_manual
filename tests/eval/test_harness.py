@@ -313,3 +313,26 @@ def test_fresh_refuses_an_external_api():
     from copilot_eval.__main__ import main
 
     assert main(["run", "--fresh", "--base-url", "http://127.0.0.1:8030", "--no-grid"]) == 2
+
+
+def test_decimal_comma_in_a_passage_is_a_decimal_point():
+    servio = "2026-02-25 RTM-H-0007 inspectie: zuigdruk c2 3,3 bar, geen alarm."
+    assert _value_failures("Suction pressure on circuit 2 was 3.3 bar.", servio) == []
+    assert _value_failures("Suction pressure on circuit 2 was 3.4 bar.", servio) != []
+    assert _value_failures("Suction pressure on circuit 2 was 3,3 bar.", servio) == []
+
+
+def test_thousands_separator_is_not_a_decimal_comma():
+    manual = "Change the oil every 4,000 h with mineral oil."
+    assert _value_failures("Change the oil every 4000 h.", manual) == []
+    assert _value_failures("Change the oil every 4,000 h.", manual) == []
+    assert _value_failures("Change the oil every 4.0 h.", manual) != []
+    assert _value_failures("The screen is 1600 px wide.", "Images up to 1,600 px.") == []
+
+
+def test_decimal_comma_leaves_lists_and_dates_alone():
+    from copilot_eval.textnorm import decimal_comma, norm
+
+    text = "steps 1,2,3 and dates 7/28,8/30"
+    assert decimal_comma(norm(text)) == text
+    assert decimal_comma(norm("3,3 bar and 0,25 mm")) == "3.3 bar and 0.25 mm"

@@ -1174,3 +1174,49 @@ Done by me at the user's request. This is 004 T047 (task: cutover), with a diffe
   notice is now `no_answer`.
 - **Checks**: 159 API tests pass, the 16 mock tests pass, `ruff check src tests` is clean, and
   `tsc` and lint are clean.
+
+## 2026-10-14 23:10 — Decimal comma accepted; final re-score (user decision)
+
+DECISION and REQUEST (to: evaluation harness)
+
+Accepted: `evaluation.md` "2026-10-14 22:54 — Final report". The 22:38 answers are the final
+run. They are the ones in the cache, and the 22:35 answers can't be re-scored.
+
+The user approved one more reading: a decimal comma in a passage counts as a decimal point. So
+"3,3 bar" grounds "3.3 bar". This is the q09 sentence 5 case (Servio work order 2600357).
+
+- Apply it only between digits, with 1 to 3 digits after the comma. A thousands separator
+  ("1,600 px", "4,000 h") must not become a decimal: "4,000 h" must not ground "4.0 h".
+- Add tests that cover:
+  - "3,3 bar" grounds "3.3 bar";
+  - "3,3 bar" doesn't ground "3.4 bar";
+  - "4,000 h" still grounds "4000 h" and "4,000 h", but not "4.0 h".
+- Make no other scoring change.
+
+Then:
+
+- Re-score from cache with the same command as before: `env -u ANSWER_COMPLETE uv run python -m
+  copilot_eval run --budget 0.10`. Don't use `--fresh`, and use port 8020, never 8000. Include the
+  grid. Report any ask that isn't served from the cache, and the cost.
+- Copy the report to `specs/006-evaluation-harness/eval-final-<timestamp>.md`.
+- `ruff` and `pytest -m "not hosted"` must pass.
+- Add one line to the README: only one fresh run at a time, because concurrent runs overwrite
+  each other's cache entries.
+
+Report in `evaluation.md`.
+
+## 2026-10-14 23:22 — Final evaluation accepted
+
+DECISION (to: all)
+
+Accepted: `evaluation.md` "2026-10-14 23:20 — Final report: decimal comma read; the cached re-score
+of the 22:38 answers passes the gate".
+
+- **The final result** is `specs/006-evaluation-harness/eval-final-20261014-2304.md`. It passes,
+  with exit code 0, 0 disclosures, 22 of 22 restricted outcomes, 10 of 10 golden outcomes and
+  236 citations with 0 failures. The grid passes, and 76 of 85 key facts are present (6 of 10
+  answers complete).
+- **The seeded-trial change** is accepted: the generator reads sources the same way as the
+  checker. The trials catch 132 of 132.
+- **The README** "Results" section now quotes this run. It defines a complete answer and explains
+  the four incomplete ones (q04, q06, q08, q09).

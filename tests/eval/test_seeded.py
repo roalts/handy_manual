@@ -13,7 +13,7 @@ import pytest
 from copilot_contracts import AnswerResponse
 from copilot_eval import citations, disclosure
 from copilot_eval.reference import Procedure
-from copilot_eval.textnorm import norm
+from copilot_eval.textnorm import decimal_comma, norm
 from tests.eval.stub import load_fixture
 
 FIX = load_fixture()
@@ -39,6 +39,7 @@ def _value_trials():
                                  f"{case['sources'][c]['text_original']}\n"
                                  f"{case['sources'][c]['text_en'] or ''}"
                                  for c in s["citations"]))
+            hay += "\n" + decimal_comma(hay)
             for v in citations.values(text):
                 bad = _perturb(v)
                 if citations._present(bad, hay):
