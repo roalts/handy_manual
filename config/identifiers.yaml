@@ -1,0 +1,29 @@
+# Canonical identifier patterns. Each pattern is matched case-insensitively against text;
+# `canonical` describes how a match is rewritten before it is stored.
+asset_id:
+  pattern: '\b(FRS|TAC|RTM|GDN)-([PCHV])-(\d{4})\b'
+  canonical: upper
+legacy_asset_id:
+  pattern: '\b(MFL|BPF)-(KM|CP|PO|TB)(\d{2})\b'
+  canonical: upper
+serial:
+  pattern: '\b(HCP|VRS|NK|BX)(\d{2,3})-(\d{6})\b'
+  canonical: upper
+case_number:
+  # Salesforce case numbers, optionally written as "SF 00041876" or "sf 00041876"
+  pattern: '\b(?:SF\s?)?(000\d{5})\b'
+  group: 1
+part_number:
+  # not the tail of a date such as 15-03-2021
+  pattern: '(?<![\d-])(\d{2}-\d{4})(?![\d-])'
+  group: 1
+fault_code:
+  pattern: '\b([EPLC])-(\d{2})\b'
+  canonical: upper
+bulletin_id:
+  pattern: '\bSB-(\d{4})-(\d{3})\b'
+  canonical: upper
+model:
+  # Model codes as written in documents; validated against the fleet register.
+  pattern: '\b(HCP|VRS|NK|BX)[- ]?(\d{2,3})\b'
+  canonical: model

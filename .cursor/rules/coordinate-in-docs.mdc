@@ -1,0 +1,16 @@
+---
+description: Agents coordinate only through Markdown files in specs/coordination/
+alwaysApply: true
+---
+
+# Coordinate in docs
+
+All communication between agents working on this project happens in Markdown files in
+`specs/coordination/`, never agent to agent. Follow `specs/coordination/README.md`:
+
+- Write only your own `specs/coordination/<component>.md`; read the others' before starting and
+  before finishing a task.
+- Status, questions, requests, decisions and final reports go in that file as dated entries.
+- A chat message to or from another agent only names the file to read; it carries no content.
+- Contract changes (`specs/contracts/`, `src/copilot_contracts/`) only after a REQUEST and a
+  DECISION recorded in `specs/coordination/orchestrator.md`.

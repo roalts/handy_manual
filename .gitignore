@@ -1,0 +1,19 @@
+.env
+.env.*
+!.env.example
+data/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+.ruff_cache/
+.cursor/skills/
+
+# screenshots and mockup images (kept locally)
+specs/**/screenshots*/
+specs/**/design/**/*.png
+
+# source art for the demo videos (the rendered videos are committed)
+demos/design/
+demos/engineering/

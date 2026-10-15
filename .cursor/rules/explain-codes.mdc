@@ -1,0 +1,30 @@
+---
+description: Explain every code or identifier in parentheses when talking to the user
+alwaysApply: true
+---
+
+# Explain codes inline
+
+The user gets confused between corpus identifiers, spec-kit labels and pipeline names.
+Whenever a message to the user mentions a code, add a short explanation in parentheses
+right after it, every time, not just the first time.
+
+Covers:
+- Spec-kit labels: task IDs, user stories, requirement and success-criteria IDs
+- Pipeline names: dataset versions, permission groups, test users
+- Corpus identifiers: procedure names, asset IDs, fault codes, parameters, case and work order numbers, model names
+
+Examples:
+- T045 (task: similarity check for restricted procedures)
+- US2 (user story: service history per machine)
+- FR-008 (requirement: every page has content or a recorded reason)
+- ds_0007 (dataset version 7)
+- u03 (test technician without high-voltage certification)
+- cert-hv (permission group: high-voltage certified)
+- HV-PROC-07 (high-voltage repair procedure, restricted)
+- P9.01 (drive parameter in HV-PROC-07)
+- TP1 (test point in HV-PROC-07)
+- E-31 (compressor fault code)
+- TAC-C-0142 (a machine's asset ID)
+- 00041207 (Salesforce support case)
+- 2501292 (Servio work order)

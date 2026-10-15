@@ -1,0 +1,95 @@
+/* Structure shared by all three directions: layout, hit areas, sheet. Colour and type live in each
+   direction's style.css. Every control's own box is its hit area (at least 44 x 44 px); the visible
+   part (".*-face") can be smaller inside it, so the walkthrough's rectangle check measures what a
+   finger can actually hit. */
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+p, ul, ol, dl, dd, figure, h1, h2 { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+button, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+a { color: inherit; }
+svg.icon { width: 1.15em; height: 1.15em; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.code { font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.94em; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+.page-wrap { min-height: 100vh; display: flex; flex-direction: column; }
+.top { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; justify-content: space-between; padding: 0 8px 0 12px; min-height: 56px; }
+.brand { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; text-decoration: none; }
+.mark { width: 28px; height: 28px; flex: none; }
+.mark .mark-h { fill: none; stroke-width: 2.6; stroke-linecap: round; }
+.top-actions { display: flex; align-items: center; }
+.icon-btn, .avatar { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 0; background: none; }
+.avatar-face { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; font-size: 14px; font-weight: 700; }
+
+.thread { flex: 1; padding: 8px 16px 24px; }
+.turn + .turn { margin-top: 32px; }
+.q { display: flex; justify-content: flex-end; margin-bottom: 16px; }
+.q-text { max-width: 85%; }
+.a-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.a-head .mark { width: 22px; height: 22px; }
+.a-body > * + * { margin-top: 12px; }
+
+.cites { white-space: nowrap; }
+.cite {
+  display: inline-flex; align-items: center; justify-content: flex-start;
+  min-width: 44px; height: 44px; margin: -14px 0; padding-left: 3px; vertical-align: middle;
+  text-decoration: none;
+}
+.cite-face { display: inline-flex; align-items: center; gap: 3px; }
+
+.context { display: flex; flex-wrap: wrap; column-gap: 6px; margin: 0 0 8px; }
+.ctx { min-width: 0; }
+.ctx[open] { flex-basis: 100%; }
+.ctx-chip { display: flex; align-items: center; min-height: 44px; list-style: none; cursor: pointer; }
+.ctx-chip::-webkit-details-marker { display: none; }
+.ctx-face { display: inline-flex; align-items: center; gap: 6px; }
+.ctx-face .code { font-size: inherit; }
+.ctx[open] .chev { transform: rotate(180deg); }
+.ctx-detail { margin: 2px 0 8px; }
+dl.ctx-detail { display: grid; grid-template-columns: auto 1fr; gap: 2px 14px; }
+dl.ctx-detail > div, .facts > div { display: contents; }
+
+.callout-title, .conflict-title, .clarify-q { display: flex; align-items: center; gap: 8px; }
+.sides { display: grid; gap: 8px; margin-top: 10px; }
+.side-tag { display: flex; align-items: center; gap: 6px; }
+.missing { margin: 6px 0 4px; padding-left: 1.1em; list-style: disc; }
+.callout-actions { margin-top: 12px; }
+.btn { white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; min-width: 44px; padding: 0 18px; }
+.options { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+
+.sources { margin-top: 20px; }
+.sources-head { display: flex; align-items: center; justify-content: space-between; min-height: 44px; list-style: none; cursor: pointer; }
+.sources-head::-webkit-details-marker { display: none; }
+.sources[open] .sources-head .chev { transform: rotate(180deg); }
+.src { display: flex; gap: 10px; align-items: flex-start; min-height: 44px; padding: 8px 0; text-decoration: none; }
+.src-body { display: flex; flex-direction: column; min-width: 0; }
+
+.dock { position: sticky; bottom: 0; z-index: 2; padding: 8px 12px max(10px, env(safe-area-inset-bottom)); }
+.followbar-text { min-width: 0; }
+.followbar { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+.composer { display: flex; align-items: flex-end; gap: 6px; }
+.composer textarea { flex: 1; min-height: 48px; resize: none; border: 0; background: none; padding: 12px 4px 12px 16px; }
+.composer textarea:focus { outline: none; }
+.send { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; flex: none; border: 0; margin: 2px; }
+.dock-hint { text-align: center; margin-top: 6px; }
+
+.empty { padding-top: 24px; }
+.hero .mark { width: 44px; height: 44px; margin-bottom: 14px; }
+.examples { display: grid; gap: 8px; margin-top: 24px; }
+.example { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 44px; text-align: left; border: 0; }
+
+.sheet-layer { position: fixed; inset: 0; z-index: 10; }
+.scrim { position: absolute; inset: 0; }
+.sheet { position: absolute; left: 0; right: 0; bottom: 0; max-height: 86vh; overflow: auto; padding: 0 16px 24px; }
+.grabber { width: 40px; height: 5px; border-radius: 3px; margin: 8px auto 6px; }
+.sheet-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.facts { display: grid; grid-template-columns: auto 1fr; gap: 4px 16px; margin: 12px 0 16px; }
+.passage p + p { margin-top: 8px; }
+.page { margin-top: 16px; }
+.page img { display: block; width: 100%; height: auto; }
+.page figcaption { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 4px; }
+.link { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; min-width: 44px; }

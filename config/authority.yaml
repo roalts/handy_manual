@@ -1,0 +1,41 @@
+# Authority tier per document type. Lower number = higher authority for guidance.
+# Tier 0 marks factual records (cases, work orders, fleet data), which are evidence, not guidance.
+tiers:
+  controlled_procedure: 1
+  work_instruction: 1
+  bulletin: 2
+  service_manual: 3
+  wiki: 4
+  email: 5
+  chat: 5
+  case_export: 0
+  maintenance_export: 0
+  fleet_register: 0
+  report: 0
+
+# Title or file-name patterns that identify document types. First match wins.
+type_rules:
+  - {pattern: '^(SOP|HV-PROC|CS-PROC|FS-STD|FS-REC)-', doc_type: controlled_procedure}
+  - {pattern: '^KT-WI-', doc_type: work_instruction}
+  - {pattern: '_SB-\d{4}-\d{3}_', doc_type: bulletin}
+  - {pattern: '(Service_Manual|IOM|OM_Manual|Betriebsanleitung|_manual_)', doc_type: service_manual}
+  - {pattern: '^Q\d_\d{4}_.*Review', doc_type: report}
+
+# Fallback by source system when no type rule matches.
+source_system_types:
+  confluence: wiki
+  email: email
+  teams: chat
+  salesforce: case_export
+  cmms: maintenance_export
+  manual_library: service_manual
+  sharepoint: wiki
+
+# When one document arrives through several systems, the copy from the earliest system in this
+# list is the canonical origin and gives the document its title.
+source_system_rank: [manual_library, sharepoint, confluence, email, teams, salesforce, cmms]
+
+controlled_types: [controlled_procedure, work_instruction]
+
+# Groups that mark a procedure as certification-restricted.
+certification_groups: [cert-hv, cert-refrigerant, cert-confined-space]

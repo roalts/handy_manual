@@ -1,0 +1,31 @@
+# Restricted-procedure markers (FR-016 to FR-019).
+#
+# Markers are content details that only make sense inside a certification-restricted procedure:
+# drive parameters, test points, voltage thresholds tied to an action. Document names are never
+# markers: a page that only says "follow HV-PROC-07" stays visible.
+#
+# Proposed markers are applied immediately (fail closed) and listed in a marker_approval review
+# item. Approving moves them to `approved`; rejecting moves them to `rejected`.
+candidate_patterns:
+  drive_parameter: '\b[A-Z]\d{1,2}\.\d{2}\b'
+  test_point: '\bTP\s?\d{1,2}\b'
+  voltage: '\b\d{1,3}(?:,\d{3})*\s?V\s?(?:DC|AC)\b'
+  resistance: '\b\d+(?:[.,]\d+)?\s?(?:MOhm|MΩ|megohm)\b'
+# A candidate is a marker only if it appears in at most this many unrestricted documents.
+max_unrestricted_documents: 1
+# Distinct markers from one procedure needed to tag a passage.
+min_markers: 2
+# Embedding similarity, step against step. A passage with at least min_candidate_steps numbered
+# steps is restricted when its steps match at least min_matched_steps distinct procedure steps at
+# step_similarity_restrict. One short of that, plus a further match at step_similarity_borderline,
+# is restricted and sent to review.
+# Calibrated on ds_0009: NK600 8.4 and Nordkyl SB-2025-014 (recover, repair, recharge) match 3
+# steps at 0.75; the closest false positive (Vastra SB-2026-003 firmware update) matches 1.
+# NK600 8.3 (low charge: leak-search advice, no circuit opening) is deliberately left visible:
+# uncertified technicians need its "do not top up" warning. Reviewed 2026-10-12.
+min_candidate_steps: 2
+min_matched_steps: 3
+step_similarity_restrict: 0.75
+step_similarity_borderline: 0.70
+approved: {}
+rejected: {}

@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b3a5b" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0d1117" media="(prefers-color-scheme: dark)">
+  <meta name="referrer" content="same-origin">
+  <title>Handy Manual</title>
+  <!-- Starts the first-screen API calls while the bundle downloads; api() in src/lib/api.ts takes them once. -->
+  <script>
+    window.__early = {};
+    ["/api/session", "/api/dev/users"].forEach(function (p) {
+      window.__early[p] = fetch(p, { credentials: "same-origin", cache: "no-store", headers: { Accept: "application/json" } });
+    });
+  </script>
+  <script type="module" src="/src/main.tsx"></script>
+</head>
+<body>
+  <div id="root"></div>
+  <noscript><p>This app needs JavaScript.</p></noscript>
+</body>
+</html>

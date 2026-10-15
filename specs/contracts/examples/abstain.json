@@ -1,0 +1,22 @@
+{
+  "answer_id": "ans_example_q07",
+  "dataset_version": "ds_0026",
+  "status": "abstain",
+  "asset": null,
+  "sentences": [],
+  "citations": {},
+  "conflicts": [],
+  "notices": [
+    {
+      "kind": "no_answer",
+      "text": "No source you can see covers the BX-20 warranty. The BX-12 warranty does not apply to the BX-20.",
+      "citations": []
+    }
+  ],
+  "clarification": null,
+  "restricted": null,
+  "abstain_reason": "no_permitted_source",
+  "work_order_suggestion": null,
+  "question_used": null,
+  "timings_ms": {}
+}

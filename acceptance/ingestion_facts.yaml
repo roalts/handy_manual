@@ -1,0 +1,265 @@
+# Acceptance facts checked against every built dataset version before it can be published
+# (FR-036). Paths are relative to the corpus directory.
+facts:
+  # --- US1: authorized, traceable passages ------------------------------------------------
+  - id: us1-unofficial-reset-quarantined
+    type: quarantined
+    path: confluence/VRS-110-VFD-quick-reset-unofficial.html
+    reason: no_access_rule
+  - id: us1-empty-checklist-quarantined
+    type: quarantined
+    path: sharepoint/Inspection_Checklist_Q3_FINAL.docx
+    reason: empty_file
+  - id: us1-hv-proc-07-steps-together
+    # first and last step, and the DC bus warning, in one passage
+    type: same_passage
+    path: sharepoint/HV-PROC-07_VRS-110_VFD_Fault_Reset.docx
+    texts: ["Read the alarm log", "P9.01", "The DC bus holds a lethal charge"]
+  - id: us1-hv-proc-02-steps-together
+    type: same_passage
+    path: sharepoint/HV-PROC-02_Electrical_Isolation_Verification.docx
+    texts: ["1. Read the work order", "5. Stop the equipment", "18. Close the isolation record"]
+  - id: us1-kt-wi-14-method-together
+    type: same_passage
+    path: sharepoint/KT-WI-14_Low_Suction_Pressure_Chillers_EN.docx
+    texts: ["5.1.1", "5.6.7"]
+  - id: us1-teams-edited-latest
+    type: passage_contains
+    path: chat/Teams_na-compressors_2026-07.json
+    text: "(edited): Cooler fins were pretty bad on the exhaust side"
+  - id: us1-teams-deleted-absent
+    type: passage_count
+    path: chat/Teams_na-compressors_2026-07.json
+    count: 7
+  - id: us1-u03-no-hv-steps
+    type: no_visible_passage_contains
+    user: u03
+    texts: ["P9.01", "TP1", "TP2"]
+  - id: us1-u03-sees-compressor-playbook-e31
+    type: visible_passage_contains
+    user: u03
+    path: confluence/Compressor-Troubleshooting-Playbook.html
+    text: "E-31"
+  - id: us1-u03-sees-work-order-guide
+    type: visible_document
+    user: u03
+    path: confluence/Work-Order-Writing-Guide.html
+  - id: us1-u02-sees-hv-proc-07
+    type: visible_passage_contains
+    user: u02
+    path: sharepoint/HV-PROC-07_VRS-110_VFD_Fault_Reset.docx
+    text: "P9.01"
+  - id: us1-document-name-not-restricted
+    # names the procedure but contains none of its steps
+    type: visible_event_contains
+    user: u10
+    asset: GDN-C-0131
+    text: "per HV-PROC-07"
+  # Step-against-step similarity: reproduced refrigerant-circuit steps are restricted,
+  # topic overlap and generic steps are not.
+  # Child passages of a restricted parent are restricted too ("Braze" is in a child).
+  - id: us1-u06-no-recovery-steps-in-manual
+    type: no_visible_passage_contains
+    user: u06
+    texts: ["Recover the refrigerant into a dedicated, labelled recovery cylinder",
+            "Braze the new valve 63-1180 in place"]
+  - id: us1-u05-sees-recovery-steps-in-manual
+    type: visible_passage_contains
+    user: u05
+    path: manuals/NK600_manual_final_v2.pdf
+    text: "Recover the refrigerant into a dedicated, labelled recovery cylinder"
+  - id: us1-u06-sees-refrigerant-background
+    type: visible_passage_contains
+    user: u06
+    path: manuals/NK600_manual_final_v2.pdf
+    text: "R-513A is an azeotropic mixture"
+  # A restricted parent restricts only the children holding matched steps: children of the
+  # KT-WI-14 method section without any stay visible.
+  - id: us1-u06-sees-kt-wi-14-evaporator-checks
+    type: visible_passage_contains
+    user: u06
+    path: sharepoint/KT-WI-14_Low_Suction_Pressure_Chillers_EN.docx
+    text: "Check the water strainer"
+  - id: us1-u03-sees-teams-hv-guidance
+    type: visible_passage_contains
+    user: u03
+    path: chat/Teams_na-compressors_2026-07.json
+    text: "Do not open the VFD cabinet"
+  - id: us1-u03-sees-playbook-e31-warning
+    type: visible_passage_contains
+    user: u03
+    path: confluence/Compressor-Troubleshooting-Playbook.html
+    text: "The panel reset is disabled for E-31 on purpose"
+  - id: us1-u03-sees-firmware-update-steps
+    type: visible_passage_contains
+    user: u03
+    path: bulletins/Vastra_SB-2026-003_VRS-110_Firmware_5.1.pdf
+    text: "Start the update in VastraLink"
+
+  # --- US2: asset identity and service history --------------------------------------------
+  - id: us2-servio-date-day-first
+    type: event_field
+    system: servio
+    record_id: "2501292"
+    field: event_date
+    value: "2025-12-02"
+  - id: us2-servio-decimal-comma
+    type: event_field
+    system: servio
+    record_id: "2300121"
+    field: labor_hours
+    value: 2.5
+  - id: us2-servio-cancelled
+    type: event_field
+    system: servio
+    record_id: "2500591"
+    field: status
+    value: cancelled
+  - id: us2-legacy-alias
+    type: alias
+    alias: MFL-KM07
+    asset_id: RTM-H-0007
+  - id: us2-site-alias
+    type: site_alias
+    alias: Rotterdam DC Maasvlakte
+    site: RTM
+  - id: us2-tac-0142-e14-history
+    type: event_query
+    asset: TAC-C-0142
+    fault_code: E-14
+    months: ["2026-03", "2026-07"]
+    cases: ["00041207", "00042388"]
+
+  # --- US3: applicability, revision and authority metadata -----------------------------------
+  - id: us3-sb-2025-009-serial-rule
+    # HCP-350 casing torque bulletin applies from serial HCP350-240001 onward
+    type: bulletin_rule
+    path: bulletins/Halden_SB-2025-009_HCP-350_Casing_Torque.pdf
+    model: HCP-350
+    serial_from: HCP350-240001
+    outcome: affected
+  - id: us3-sb-2025-009-frs-p-0031-affected
+    # FRS-P-0031 = HCP-350 pump, serial HCP350-241187
+    type: bulletin_asset
+    path: bulletins/Halden_SB-2025-009_HCP-350_Casing_Torque.pdf
+    asset: FRS-P-0031
+    status: affected
+  - id: us3-sb-2025-009-earlier-serial-check-on-site
+    # FRS-P-0012 = HCP-350 built before HCP350-240001; a replacement Version 2 cover would bring
+    # it into scope, which the fleet register cannot tell
+    type: bulletin_asset
+    path: bulletins/Halden_SB-2025-009_HCP-350_Casing_Torque.pdf
+    asset: FRS-P-0012
+    status: check_on_site
+  - id: us3-sb-2025-014-rtm-h-0007-campaign
+    # RTM-H-0007 = NK-600 chiller in Rotterdam, EU delivery inside the affected serial band
+    type: bulletin_asset
+    path: bulletins/Nordkyl_SB-2025-014_NK-600_EXV_Campaign.pdf
+    asset: RTM-H-0007
+    status: in_campaign
+    campaign_code: NK-C25-14
+  - id: us3-sb-2025-014-rtm-h-0008-not-affected
+    # RTM-H-0008 = NK-600 serial NK600-240702, built with the rev 3 valve
+    type: bulletin_asset
+    path: bulletins/Nordkyl_SB-2025-014_NK-600_EXV_Campaign.pdf
+    asset: RTM-H-0008
+    status: not_affected
+  - id: us3-sb-2026-003-firmware-condition
+    type: bulletin_rule
+    path: bulletins/Vastra_SB-2026-003_VRS-110_Firmware_5.1.pdf
+    model: VRS-110
+    firmware_condition: 5.0.0 to 5.0.3
+    outcome: affected
+  - id: us3-sb-2026-003-tac-c-0142-affected
+    # TAC-C-0142 = VRS-110 compressor on firmware 5.0
+    type: bulletin_asset
+    path: bulletins/Vastra_SB-2026-003_VRS-110_Firmware_5.1.pdf
+    asset: TAC-C-0142
+    status: affected
+  - id: us3-sb-2026-003-tac-c-0143-not-affected
+    # TAC-C-0143 = VRS-110 compressor already on firmware 5.1
+    type: bulletin_asset
+    path: bulletins/Vastra_SB-2026-003_VRS-110_Firmware_5.1.pdf
+    asset: TAC-C-0143
+    status: not_affected
+  - id: us3-vrs-75-rev-c-supersedes-rev-b
+    type: relation
+    path: manuals/Vastra_VRS-75_Service_Manual_RevC_2026.pdf
+    to_path: manuals/Vastra_VRS-75_Service_Manual_RevB_2024.pdf
+    relation: supersedes
+  - id: us3-vrs-75-rev-b-superseded
+    type: document_field
+    path: manuals/Vastra_VRS-75_Service_Manual_RevB_2024.pdf
+    field: status
+    value: superseded
+  - id: us3-vrs-75-rev-c-current
+    type: document_field
+    path: manuals/Vastra_VRS-75_Service_Manual_RevC_2026.pdf
+    field: status
+    value: active
+  - id: us3-vrs-75-rev-c-issue-date
+    type: document_field
+    path: manuals/Vastra_VRS-75_Service_Manual_RevC_2026.pdf
+    field: issue_date
+    value: "2026-04-20"
+  - id: us3-nk600-one-document
+    # same NK-600 chiller manual from SharePoint and the manual library
+    type: origins
+    path: manuals/Nordkyl_NK-600_Service_Manual_RevC.pdf
+    paths: [manuals/NK600_manual_final_v2.pdf, manuals/Nordkyl_NK-600_Service_Manual_RevC.pdf]
+    title: Nordkyl NK-600 Service Manual Rev C
+  - id: us3-vrs-wiki-intervals-stale
+    # 2024 wiki interval table vs the 2026 VRS-75 Rev C manual
+    type: possibly_stale
+    path: confluence/VRS-Series-Oil-and-Filter-Quick-Reference.html
+    text: "Separator element"
+    expected: true
+  - id: us3-vrs-wiki-procedure-not-stale
+    type: possibly_stale
+    path: confluence/VRS-Series-Oil-and-Filter-Quick-Reference.html
+    text: "Run the unit for 10 minutes so the oil is warm"
+    expected: false
+
+  # --- US4: scans, damaged files, other languages ----------------------------------------------
+  - id: us4-hcp-200-clearance-verified
+    # HCP-200 = Halden pump, 1998 scanned manual; impeller-to-casing clearance on page 3
+    type: passage_contains
+    path: manuals/Halden_HCP-200_Betriebsanleitung_1998_scan.pdf
+    text: "0.38 - 0.50 mm"
+  - id: us4-hcp-200-no-tesseract-misread
+    # Tesseract reads the clearance as "2.10 050 mm"; it must never reach the text
+    type: no_passage_contains
+    path: manuals/Halden_HCP-200_Betriebsanleitung_1998_scan.pdf
+    texts: ["2.10", "2,10", "HGP-200"]
+  - id: us4-hcp-200-model
+    type: document_field
+    path: manuals/Halden_HCP-200_Betriebsanleitung_1998_scan.pdf
+    field: models
+    value: "{HCP-200}"
+  - id: us4-hcp-200-revision-from-footer
+    type: document_field
+    path: manuals/Halden_HCP-200_Betriebsanleitung_1998_scan.pdf
+    field: revision
+    value: A
+  - id: us4-vrs-45-bulletin-partial
+    # SB-2026-015 = Vastra VRS-45 coupling bulletin; page 1 cut off, page 2 unrecoverable
+    type: document_field
+    path: bulletins/Vastra_SB-2026-015_VRS-45_Coupling.pdf
+    field: status
+    value: partial
+  - id: us4-vrs-45-bulletin-missing-pages
+    type: document_field
+    path: bulletins/Vastra_SB-2026-015_VRS-45_Coupling.pdf
+    field: missing_pages
+    value: "{1,2}"
+  - id: us4-servio-note-translated
+    # Servio work order 2300538 (Dutch maintenance export): high pressure fault L-01
+    type: event_notes_en
+    system: servio
+    record_id: "2300538"
+    contains: "condenser"
+  - id: us4-halden-bulletin-bilingual-kept-together
+    # English and German versions of the same notice stay in one passage
+    type: same_passage
+    path: bulletins/Halden_SB-2025-009_HCP-350_Casing_Torque.pdf
+    texts: ["New casing bolt tightening torque", "geänderter Gehäusedeckel"]

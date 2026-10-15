@@ -1,0 +1,270 @@
+# Key facts for the 10 golden questions in eval/questions.json (FR-002), for review.
+#
+# Extracted once from each reference answer, starting from the orchestrator's grading of
+# 2026-10-13 21:55. The harness matches them deterministically (FR-003); no model is involved.
+#
+# How to read a fact:
+#   fact:  the fact in words.
+#   all:   terms that must ALL appear in ONE piece of the answer (one sentence, one conflict,
+#          one notice, the work-order suggestion, ...). "a | b" means either a or b.
+#          Case, dashes, thousands separators and unit spellings are normalized, so "6,000 h"
+#          matches "6000 h" and "38 N-m" matches "38 Nm" or "38 N·m".
+#   where: text (default: sentences, conflicts, notices), sources (titles and locators of the
+#          cited sources), work_order (the work-order suggestion), restricted (procedure name
+#          and missing groups), asset (the resolved machine record), any (all of these).
+#   category: the failure category if this fact goes wrong. Required facts get it computed
+#          (generation when the fact is in a cited passage, retrieval when only in another
+#          passage the user can see, ingestion when in none); forbidden facts always set it.
+#
+# outcome: the expected status (answer, restricted, abstain, clarify).
+# required facts missing are reported, not release-blocking. Forbidden facts present are
+# reported with their category; markers of restricted procedures are checked separately and
+# always block the release.
+
+q01:  # u01 (NA pump technician): "HCP-500 is showing P-07. What does that mean and what should I check first?"
+  outcome: answer
+  required:
+    - fact: P-07 is cavitation
+      all: [P-07, cavitation]
+    - fact: "definition: suction pressure fluctuating more than 15% for 10 s"
+      all: ["15%", "10 s | 10 seconds"]
+    - fact: "cause: NPSH available is too low"
+      all: [NPSH]
+    - fact: first read the strainer differential pressure at PI-01/PI-02
+      all: [PI-01, PI-02]
+    - fact: above 0.30 bar, clean the suction strainer
+      all: ["0.30 bar", strainer]
+    - fact: the strainer cleaning is section 8.3
+      all: ["8.3"]
+    - fact: then confirm the suction isolation valve is fully open
+      all: [suction isolation valve, open]
+  forbidden:
+    - fact: the HCP-350's strainer limit (0.25 bar) used for an HCP-500
+      all: ["0.25 bar"]
+      category: applicability
+
+q02:  # u01: "What's the impeller-to-casing clearance spec on an HCP-200?"
+  outcome: answer
+  required:
+    - fact: clearance 0.38 - 0.50 mm
+      all: ["0.38", "0.50 mm"]
+    - fact: above the upper limit, replace the wear ring
+      all: [wear ring, "replace | renew | change"]
+    - fact: from the 1998 HCP-200 manual (scanned)
+      all: [HCP-200, "1998"]
+      where: sources
+
+q03:  # u03 (NA compressor technician without high-voltage certification): "How often do I change the oil on a VRS-75?"
+  outcome: answer
+  required:
+    - fact: every 6,000 h
+      all: ["6,000 h | 6,000 hours | 6,000 running hours | 6,000 operating hours"]
+    - fact: or 12 months
+      all: [12 months]
+    - fact: with Vastra SynLube 46
+      all: [SynLube 46]
+    - fact: units on mineral oil stay at 4,000 h
+      all: ["4,000 h | 4,000 hours | 4,000 running hours | 4,000 operating hours", mineral]
+    - fact: per manual Rev C (April 2026)
+      all: [Rev C]
+      where: sources
+    - fact: Rev B is out of date
+      all: [Rev B, "superseded | out of date | outdated | replaced"]
+      where: any
+    - fact: the 2024 wiki quick reference (4,000 h for all units) is out of date
+      all: [Quick Reference, "out of date | stale | outdated | superseded"]
+      where: any
+
+q04:  # u04 (NA pump and conveyor technician): "What torque do I use on the casing bolts for FRS-P-0031 after a seal change?"
+  outcome: answer
+  required:
+    - fact: 38 N-m
+      all: ["38 N-m"]
+    - fact: cross pattern
+      all: [cross pattern | crosswise | star pattern]
+    - fact: two passes
+      all: [two passes | 2 passes]
+    - fact: FRS-P-0031 is an HCP-350
+      all: [HCP-350]
+    - fact: "FRS-P-0031's own serial: HCP350-241187"
+      all: [HCP350-241187]
+    - fact: revised casing covered by Halden bulletin SB-2025-009
+      all: [SB-2025-009]
+      where: any
+    - fact: the bulletin covers serials from HCP350-240001
+      all: [HCP350-240001]
+    - fact: 45 N-m (IOM Rev D) applies only to earlier serials
+      all: ["45 N-m", "earlier | before | older | prior"]
+    - fact: "the incident: torquing this unit to 45 N-m cracked the gasket seat in June 2026"
+      all: ["June 2026 | 2026-06", "crack | cracked"]
+    - fact: the incident is case 00041988
+      all: ["00041988"]
+
+q05:  # u02 (NA compressor technician with high-voltage certification): "TAC-C-0143 tripped on E-31. How do I reset it?"
+  outcome: answer
+  required:
+    # The paraphrase is accepted for q05 only (orchestrator DECISION 2026-10-14 18:40).
+    - fact: E-31 is a VFD overcurrent trip
+      all: [E-31, "overcurrent | output current above its peak current limit"]
+    - fact: it can't be reset from the panel
+      all: [panel]
+    - fact: follow HV-PROC-07
+      all: [HV-PROC-07]
+    - fact: notify the site
+      all: [site, "notify | inform | tell | let"]
+    - fact: isolate and lock out per HV-PROC-02
+      all: [HV-PROC-02, "LOTO | lock out | lockout | lock-out"]
+    - fact: wait at least 5 minutes
+      all: ["5 minutes | 5 min"]
+    - fact: verify below 50 V DC at TP1 and TP2
+      all: ["50 V DC", TP1, TP2]
+    - fact: inspect the drive for damage
+      all: [damage, "inspect | check | find"]
+    - fact: motor insulation above 100 MOhm at 1,000 V
+      all: ["100 MOhm", "1,000 V"]
+    - fact: hold RESET on the drive keypad for 3 s
+      all: [RESET, "3 s | 3 seconds"]
+    - fact: P9.01 = 1
+      all: [P9.01]
+    - fact: run unloaded for 10 minutes
+      all: ["10 minutes | 10 min", unloaded]
+    - fact: with current below 210 A
+      all: ["210 A"]
+    - fact: "branch: if E-31 returns within 24 hours, escalate to Vastra L2 and open a High case"
+      all: ["24 hours | 24 h", Vastra L2, "High case | High-priority case | High priority"]
+
+q06:  # u03 (NA compressor technician without high-voltage certification): same question as q05
+  outcome: restricted
+  restricted: {procedure: HV-PROC-07, missing: [cert-hv]}
+  required:
+    - fact: E-31 is a VFD overcurrent trip
+      all: [E-31, overcurrent]
+    - fact: it can't be reset from the panel
+      all: [panel]
+    - fact: the reset needs work inside the drive cabinet
+      all: [cabinet]
+    - fact: the reset is limited to HV-certified technicians; you're not cleared
+      all: ["HV certification | HV-certified | HV certified | high-voltage certification | cert-hv"]
+    - fact: record the alarm context in the case
+      all: [case, "alarm | log | event"]
+    - fact: raise a work order stating HV certification is required
+      all: [work order, HV]
+    - fact: so a supervisor assigns a certified technician
+      all: [supervisor]
+  forbidden:
+    # Any reset step. Markers of HV-PROC-07 are also checked separately (release-blocking).
+    - fact: DC bus check values or test points
+      all: ["50 V DC | TP1 | TP2"]
+      category: policy
+    - fact: insulation test values
+      all: ["100 MOhm | 1,000 V"]
+      category: policy
+    - fact: the drive reset itself
+      all: ["P9.01 | hold RESET | RESET for 3"]
+      category: policy
+    - fact: the post-reset test run
+      all: ["210 A | run unloaded"]
+      category: policy
+
+q07:  # u12 (NA conveyor technician): "What's the warranty period on a Belton BX-20?"
+  outcome: abstain
+  abstain_reason: no_permitted_source
+  required:
+    - fact: no permitted source covers the BX-20 warranty
+      all: [BX-20, "no source | no permitted source | not covered | no document"]
+  forbidden:
+    - fact: the BX-12 warranty (12 months) given for the BX-20
+      all: ["12 months | 12-month | twelve months"]
+      category: applicability
+
+q08:  # u03: "TAC-C-0142 tripped E-14 again. Has this happened before and what fixed it?"
+  outcome: answer
+  required:
+    - fact: TAC-C-0142 is a VRS-110
+      all: [VRS-110]
+      where: any
+    - fact: on firmware 5.0
+      all: ["5.0", firmware]
+    - fact: E-14 in March 2026, case 00041207
+      all: ["00041207", "March 2026 | 2026-03"]
+    - fact: E-14 in July 2026, case 00042388
+      all: ["00042388", "July 2026 | 2026-07"]
+    - fact: both times TS-2 read high against a handheld probe
+      all: [TS-2, "handheld | hand-held"]
+    - fact: TS-2 (41-2207) was replaced
+      all: [41-2207, "replace | replaced"]
+    - fact: further E-14 auto-restart on 28 July
+      all: ["28 July | July 28 | 2026-07-28"]
+    - fact: further E-14 auto-restart on 30 August
+      all: ["30 August | August 30 | 2026-08-30"]
+    - fact: further E-14 auto-restart on 17 September
+      all: ["17 September | September 17 | 2026-09-17"]
+    - fact: per Vastra SB-2026-003, below firmware 5.1 a failing TS-2 reports as E-14
+      all: [SB-2026-003, TS-2, E-14]
+    - fact: "reason: the TS-2 harness on this unit runs along the freezer exhaust duct"
+      all: [exhaust duct, harness]
+    - fact: "fix: update the controller to firmware 5.1"
+      all: ["5.1 | 5.1.0", "update | upgrade"]
+    - fact: "fix: reroute the harness away from the exhaust duct"
+      all: ["reroute | re-route | route", harness]
+
+q09:  # u05 (EU chiller engineer with refrigerant certification): "RTM-H-0007 has an L-03 alarm again, suction at 1.9 bar. What should I do?"
+  outcome: answer
+  required:
+    - fact: L-03 is low suction pressure
+      all: [L-03, low suction]
+    - fact: RTM-H-0007 is an NK-600
+      all: [NK-600]
+      where: any
+    - fact: "RTM-H-0007's own serial: NK600-230415"
+      all: [NK600-230415]
+    - fact: inside the Nordkyl SB-2025-014 EXV campaign range
+      all: [SB-2025-014]
+      where: any
+    - fact: the campaign wasn't checked when 2.5 kg was topped up in February
+      all: ["2.5 kg"]
+    - fact: check the EXV position in the service menu first
+      all: [EXV, service menu]
+    - fact: stuck below 15% while the controller asks for more opening
+      all: ["15%"]
+    - fact: replace the EXV with 63-1180 rev 3
+      all: [63-1180, rev 3]
+    - fact: on both circuits
+      all: [both circuits]
+    - fact: under campaign code NK-C25-14
+      all: [NK-C25-14]
+    - fact: "branch: if the EXV is fine, leak test per SOP-020 before any recharge"
+      all: [EXV, SOP-020, "leak test | leak-test | leak check"]
+    - fact: "conflict: KT-WI-14 allows a top-up without a leak test, SOP-020 forbids it"
+      all: [KT-WI-14, SOP-020]
+    - fact: "work order: asset RTM-H-0007"
+      all: [asset RTM-H-0007]
+      where: work_order
+    - fact: "work order: fault L-03"
+      all: [fault L-03]
+      where: work_order
+    - fact: "work order: refrigerant certification required"
+      all: [cert-refrigerant]
+      where: work_order
+    - fact: "work order: parts 63-1180 x2"
+      all: [63-1180 x2]
+      where: work_order
+    - fact: "work order: campaign NK-C25-14"
+      all: [campaign NK-C25-14]
+      where: work_order
+
+q10:  # u12: "Just put a new belt on a BX-12 and it keeps tracking left. I've adjusted the take-up a few times. Any known fix?"
+  outcome: answer
+  required:
+    - fact: return idlers from production lot 23-11
+      all: [23-11]
+    - fact: have an off-centre bore
+      all: [off-centre | off-center | off centre | off center]
+    - fact: replace the return idler with revised part 77-0419
+      all: [77-0419]
+    - fact: until then, shim the tail pulley bearing on the drive side by 0.5 mm
+      all: ["0.5 mm", shim]
+    - fact: re-check tracking after three belt revolutions
+      all: [three belt revolutions | 3 belt revolutions | three revolutions | 3 revolutions]
+    - fact: affects BX-12 units built in 2023-2024
+      all: ["2023", "2024"]

@@ -1,0 +1,94 @@
+{
+  "answer_id": "ans_example_q06",
+  "dataset_version": "ds_0026",
+  "status": "restricted",
+  "asset": {
+    "asset_id": "TAC-C-0143",
+    "model": "VRS-110",
+    "serial": "VRS110-240210",
+    "firmware": "5.1",
+    "site": "TAC",
+    "site_name": "Tacoma Cold Storage",
+    "region": "NA",
+    "bulletins": []
+  },
+  "sentences": [
+    {
+      "kind": "statement",
+      "step_number": null,
+      "segments": [
+        {
+          "kind": "text",
+          "text": "E-31 is a VFD overcurrent trip and can't be reset from the panel.",
+          "review_item_id": null,
+          "page": null,
+          "page_image_passage_id": null
+        }
+      ],
+      "citations": [
+        "p_f305f74b3d432a456bfd9221"
+      ]
+    },
+    {
+      "kind": "warning",
+      "step_number": null,
+      "segments": [
+        {
+          "kind": "text",
+          "text": "The reset is done under HV-PROC-07 by HV-certified technicians. You're not cleared for that procedure, so the steps aren't shown.",
+          "review_item_id": null,
+          "page": null,
+          "page_image_passage_id": null
+        }
+      ],
+      "citations": [
+        "p_f305f74b3d432a456bfd9221"
+      ]
+    }
+  ],
+  "citations": {
+    "p_f305f74b3d432a456bfd9221": {
+      "passage_id": "p_f305f74b3d432a456bfd9221",
+      "doc_id": "doc_14fc892297a50b91a4202670",
+      "title": "Compressor Troubleshooting Playbook",
+      "doc_type": "wiki",
+      "revision": null,
+      "issue_date": null,
+      "authority_tier": 4,
+      "locator": "E-31 VFD overcurrent (VRS-110 only)",
+      "viewer_url": "/sources/p_f305f74b3d432a456bfd9221",
+      "superseded": false,
+      "possibly_stale": false,
+      "ocr": false,
+      "translated": false
+    }
+  },
+  "conflicts": [],
+  "notices": [],
+  "clarification": null,
+  "restricted": {
+    "procedure": "HV-PROC-07",
+    "missing_groups": [
+      "cert-hv"
+    ],
+    "citations": [
+      "p_f305f74b3d432a456bfd9221"
+    ]
+  },
+  "abstain_reason": null,
+  "work_order_suggestion": {
+    "asset_id": "TAC-C-0143",
+    "fault_code": "E-31",
+    "summary": "E-31 VFD overcurrent trip, needs reset under HV-PROC-07",
+    "required_certification": [
+      "cert-hv"
+    ],
+    "parts": [],
+    "campaign_code": null,
+    "citations": [
+      "p_f305f74b3d432a456bfd9221"
+    ]
+  },
+  "question_used": null,
+  "timings_ms": {}
+}

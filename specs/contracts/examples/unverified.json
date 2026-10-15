@@ -1,0 +1,71 @@
+{
+  "answer_id": "ans_example_unverified",
+  "dataset_version": "ds_0026",
+  "status": "answer",
+  "asset": null,
+  "sentences": [
+    {
+      "kind": "statement",
+      "step_number": null,
+      "segments": [
+        {
+          "kind": "text",
+          "text": "The rated head is ",
+          "review_item_id": null,
+          "page": null,
+          "page_image_passage_id": null
+        },
+        {
+          "kind": "unverified",
+          "text": "",
+          "review_item_id": "r_0000000000000000",
+          "page": 3,
+          "page_image_passage_id": "p_7a891cda95ff12c33c8caaa5"
+        },
+        {
+          "kind": "text",
+          "text": ".",
+          "review_item_id": null,
+          "page": null,
+          "page_image_passage_id": null
+        }
+      ],
+      "citations": [
+        "p_7a891cda95ff12c33c8caaa5"
+      ]
+    }
+  ],
+  "citations": {
+    "p_7a891cda95ff12c33c8caaa5": {
+      "passage_id": "p_7a891cda95ff12c33c8caaa5",
+      "doc_id": "doc_6c7fca788eb5c49afe2201d6",
+      "title": "Halden HCP-200 Betriebsanleitung 1998 (scan)",
+      "doc_type": "service_manual",
+      "revision": "A",
+      "issue_date": null,
+      "authority_tier": 3,
+      "locator": "p. 3, 3 Technische Daten / Technical data",
+      "viewer_url": "/sources/p_7a891cda95ff12c33c8caaa5",
+      "superseded": false,
+      "possibly_stale": false,
+      "ocr": true,
+      "translated": true
+    }
+  },
+  "conflicts": [],
+  "notices": [
+    {
+      "kind": "unverified_value",
+      "text": "One value could not be verified from the scan. Check scanned page 3.",
+      "citations": [
+        "p_7a891cda95ff12c33c8caaa5"
+      ]
+    }
+  ],
+  "clarification": null,
+  "restricted": null,
+  "abstain_reason": null,
+  "work_order_suggestion": null,
+  "question_used": null,
+  "timings_ms": {}
+}

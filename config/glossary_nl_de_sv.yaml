@@ -1,0 +1,31 @@
+# Domain terms for consistent translation into English.
+nl:
+  storing: fault
+  gereset: reset
+  gereed: completed
+  geannuleerd: cancelled
+  monteur: technician
+  werkorder: work order
+  onderdelen: parts
+  draaiuren: run hours
+  klant: customer
+  afsluiter: valve
+  condensor: condenser
+  hoge druk: high pressure
+  persdruk: discharge pressure
+  fasefout: phase fault
+  stroomuitval: power outage
+  stroomstoring: power failure
+  inspectie: inspection
+de:
+  Spaltmaß: clearance
+  Laufrad: impeller
+  Gehäuse: casing
+  Anzugsmoment: tightening torque
+  Gleitringdichtung: mechanical seal
+  Spaltring: wear ring
+  Betriebsanleitung: operating instructions
+  Gehäusedeckel: casing cover
+  Gehäusedichtung: casing gasket
+sv:
+  Teknisk serviceinformation: technical service information

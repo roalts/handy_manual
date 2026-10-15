@@ -1,0 +1,30 @@
+{
+  "answer_id": "ans_example_clarify",
+  "dataset_version": "ds_0026",
+  "status": "clarify",
+  "asset": null,
+  "sentences": [],
+  "citations": {},
+  "conflicts": [],
+  "notices": [],
+  "clarification": {
+    "question": "Which HCP-350 at Fresno?",
+    "options": [
+      {
+        "asset_id": "FRS-P-0012",
+        "label": "FRS-P-0012 (HCP350-221034)",
+        "question": null
+      },
+      {
+        "asset_id": "FRS-P-0031",
+        "label": "FRS-P-0031 (HCP350-241187)",
+        "question": null
+      }
+    ]
+  },
+  "restricted": null,
+  "abstain_reason": null,
+  "work_order_suggestion": null,
+  "question_used": null,
+  "timings_ms": {}
+}

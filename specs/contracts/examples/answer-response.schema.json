@@ -1,0 +1,753 @@
+{
+  "$defs": {
+    "AssetBulletin": {
+      "additionalProperties": false,
+      "properties": {
+        "doc_id": {
+          "title": "Doc Id",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "affected",
+            "in_campaign",
+            "not_affected",
+            "check_on_site"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "campaign_code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Campaign Code"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reason"
+        },
+        "citations": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Citations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "doc_id",
+        "title",
+        "status"
+      ],
+      "title": "AssetBulletin",
+      "type": "object"
+    },
+    "Citation": {
+      "additionalProperties": false,
+      "properties": {
+        "passage_id": {
+          "title": "Passage Id",
+          "type": "string"
+        },
+        "doc_id": {
+          "title": "Doc Id",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "doc_type": {
+          "title": "Doc Type",
+          "type": "string"
+        },
+        "revision": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Revision"
+        },
+        "issue_date": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Issue Date"
+        },
+        "authority_tier": {
+          "title": "Authority Tier",
+          "type": "integer"
+        },
+        "locator": {
+          "title": "Locator",
+          "type": "string"
+        },
+        "viewer_url": {
+          "title": "Viewer Url",
+          "type": "string"
+        },
+        "superseded": {
+          "default": false,
+          "title": "Superseded",
+          "type": "boolean"
+        },
+        "possibly_stale": {
+          "default": false,
+          "title": "Possibly Stale",
+          "type": "boolean"
+        },
+        "ocr": {
+          "default": false,
+          "title": "Ocr",
+          "type": "boolean"
+        },
+        "translated": {
+          "default": false,
+          "title": "Translated",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "passage_id",
+        "doc_id",
+        "title",
+        "doc_type",
+        "revision",
+        "issue_date",
+        "authority_tier",
+        "locator",
+        "viewer_url"
+      ],
+      "title": "Citation",
+      "type": "object"
+    },
+    "Clarification": {
+      "additionalProperties": false,
+      "properties": {
+        "question": {
+          "title": "Question",
+          "type": "string"
+        },
+        "options": {
+          "items": {
+            "$ref": "#/$defs/ClarifyOption"
+          },
+          "minItems": 1,
+          "title": "Options",
+          "type": "array"
+        }
+      },
+      "required": [
+        "question",
+        "options"
+      ],
+      "title": "Clarification",
+      "type": "object"
+    },
+    "ClarifyOption": {
+      "additionalProperties": false,
+      "description": "Exactly one of `asset_id` (pick a machine) or `question` (resend this text instead,\ne.g. \"did you mean HCP-200?\") is set.",
+      "properties": {
+        "asset_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Asset Id"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "question": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Question"
+        }
+      },
+      "required": [
+        "label"
+      ],
+      "title": "ClarifyOption",
+      "type": "object"
+    },
+    "Conflict": {
+      "additionalProperties": false,
+      "properties": {
+        "topic": {
+          "title": "Topic",
+          "type": "string"
+        },
+        "sides": {
+          "items": {
+            "$ref": "#/$defs/ConflictSide"
+          },
+          "minItems": 2,
+          "title": "Sides",
+          "type": "array"
+        },
+        "preferred": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Preferred"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "topic",
+        "sides",
+        "preferred",
+        "reason"
+      ],
+      "title": "Conflict",
+      "type": "object"
+    },
+    "ConflictSide": {
+      "additionalProperties": false,
+      "properties": {
+        "statement": {
+          "title": "Statement",
+          "type": "string"
+        },
+        "citations": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Citations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "statement",
+        "citations"
+      ],
+      "title": "ConflictSide",
+      "type": "object"
+    },
+    "Notice": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "superseded",
+            "possibly_stale",
+            "bulletin",
+            "check_on_site",
+            "unverified_value",
+            "not_visible",
+            "translated",
+            "history",
+            "no_answer"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "citations": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Citations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "text"
+      ],
+      "title": "Notice",
+      "type": "object"
+    },
+    "PartLine": {
+      "additionalProperties": false,
+      "properties": {
+        "part_number": {
+          "title": "Part Number",
+          "type": "string"
+        },
+        "quantity": {
+          "default": 1,
+          "title": "Quantity",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "part_number"
+      ],
+      "title": "PartLine",
+      "type": "object"
+    },
+    "ResolvedAsset": {
+      "additionalProperties": false,
+      "properties": {
+        "asset_id": {
+          "title": "Asset Id",
+          "type": "string"
+        },
+        "model": {
+          "title": "Model",
+          "type": "string"
+        },
+        "serial": {
+          "title": "Serial",
+          "type": "string"
+        },
+        "firmware": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Firmware"
+        },
+        "site": {
+          "title": "Site",
+          "type": "string"
+        },
+        "site_name": {
+          "title": "Site Name",
+          "type": "string"
+        },
+        "region": {
+          "title": "Region",
+          "type": "string"
+        },
+        "bulletins": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/AssetBulletin"
+          },
+          "title": "Bulletins",
+          "type": "array"
+        }
+      },
+      "required": [
+        "asset_id",
+        "model",
+        "serial",
+        "firmware",
+        "site",
+        "site_name",
+        "region"
+      ],
+      "title": "ResolvedAsset",
+      "type": "object"
+    },
+    "Restricted": {
+      "additionalProperties": false,
+      "properties": {
+        "procedure": {
+          "title": "Procedure",
+          "type": "string"
+        },
+        "missing_groups": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Missing Groups",
+          "type": "array"
+        },
+        "citations": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Citations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "procedure",
+        "missing_groups",
+        "citations"
+      ],
+      "title": "Restricted",
+      "type": "object"
+    },
+    "Segment": {
+      "additionalProperties": false,
+      "description": "Text, or a withheld scanned value that must be shown as unverified and never filled in.",
+      "properties": {
+        "kind": {
+          "enum": [
+            "text",
+            "unverified"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "text": {
+          "default": "",
+          "title": "Text",
+          "type": "string"
+        },
+        "review_item_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Review Item Id"
+        },
+        "page": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Page"
+        },
+        "page_image_passage_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Page Image Passage Id"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "title": "Segment",
+      "type": "object"
+    },
+    "Sentence": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "statement",
+            "step",
+            "warning"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "step_number": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Step Number"
+        },
+        "segments": {
+          "items": {
+            "$ref": "#/$defs/Segment"
+          },
+          "title": "Segments",
+          "type": "array"
+        },
+        "citations": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Citations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "segments",
+        "citations"
+      ],
+      "title": "Sentence",
+      "type": "object"
+    },
+    "WorkOrderSuggestion": {
+      "additionalProperties": false,
+      "description": "Prefill for a work-order draft. Every value comes from a cited passage or the asset.",
+      "properties": {
+        "asset_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Asset Id"
+        },
+        "fault_code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fault Code"
+        },
+        "summary": {
+          "title": "Summary",
+          "type": "string"
+        },
+        "required_certification": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Required Certification",
+          "type": "array"
+        },
+        "parts": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/PartLine"
+          },
+          "title": "Parts",
+          "type": "array"
+        },
+        "campaign_code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Campaign Code"
+        },
+        "citations": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Citations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "summary"
+      ],
+      "title": "WorkOrderSuggestion",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "answer_id": {
+      "title": "Answer Id",
+      "type": "string"
+    },
+    "dataset_version": {
+      "title": "Dataset Version",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "answer",
+        "clarify",
+        "abstain",
+        "restricted"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "asset": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ResolvedAsset"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "sentences": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Sentence"
+      },
+      "title": "Sentences",
+      "type": "array"
+    },
+    "citations": {
+      "additionalProperties": {
+        "$ref": "#/$defs/Citation"
+      },
+      "default": {},
+      "title": "Citations",
+      "type": "object"
+    },
+    "conflicts": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Conflict"
+      },
+      "title": "Conflicts",
+      "type": "array"
+    },
+    "notices": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Notice"
+      },
+      "title": "Notices",
+      "type": "array"
+    },
+    "clarification": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Clarification"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "restricted": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Restricted"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "abstain_reason": {
+      "anyOf": [
+        {
+          "enum": [
+            "no_permitted_source",
+            "not_visible",
+            "unknown_asset",
+            "out_of_scope"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Abstain Reason"
+    },
+    "work_order_suggestion": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/WorkOrderSuggestion"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "question_used": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Question Used"
+    },
+    "timings_ms": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "default": {},
+      "title": "Timings Ms",
+      "type": "object"
+    }
+  },
+  "required": [
+    "answer_id",
+    "dataset_version",
+    "status"
+  ],
+  "title": "AnswerResponse",
+  "type": "object"
+}

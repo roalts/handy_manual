@@ -1,0 +1,84 @@
+# Per-source conventions. Formats are never inferred from values.
+maintpro:
+  path: data/maintpro_history_NA_2023-2026.csv
+  delimiter: ","
+  date_format: "%m/%d/%Y"
+  decimal: "."
+  lang: en
+  record_id: WO_No
+  columns:
+    date: Date
+    asset: Asset
+    model: Model
+    serial: Serial
+    site: Site
+    event_type: Event_Type
+    fault_code: Fault
+    notes: Notes
+    parts: Parts
+    technician: Tech
+    labor_hours: Labor_Hrs
+    run_hours: Hours
+    status: Status
+  status_map:
+    CLOSED: completed
+    OPEN: open
+    WAITING PARTS: open
+    CANCELLED: cancelled
+  event_type_map:
+    Inspection: inspection
+    PM: preventive
+    CM: corrective
+    Alarm: alarm
+    Firmware: firmware
+    Meter: meter
+servio:
+  path: data/servio_export_EU_2023-2026.csv
+  delimiter: ";"
+  date_format: "%d-%m-%Y"
+  decimal: ","
+  lang: nl
+  record_id: werkorder
+  columns:
+    date: datum
+    asset: object
+    legacy_asset: object_oud
+    site_name: locatie
+    event_type: type
+    fault_code: storingscode
+    notes: omschrijving
+    parts: onderdelen
+    technician: monteur
+    labor_hours: uren
+    run_hours: draaiuren
+    status: status
+  status_map:
+    Gereed: completed
+    Open: open
+    Geannuleerd: cancelled
+  event_type_map:
+    Inspectie: inspection
+    PO: preventive
+    Storing: corrective
+    Alarm: alarm
+    Software: firmware
+    Meterstand: meter
+    F-gas controle: fgas_check
+fleet_register:
+  path: data/fleet_register.csv
+  delimiter: ","
+  date_format: "%m/%d/%Y"
+salesforce:
+  paths:
+    - data/salesforce_cases_NA_2025-2026.json
+    - data/salesforce_cases_EU_2025-2026.json
+  date_format: iso8601
+  status_map:
+    Closed: completed
+    New: open
+    Monitoring: open
+    Waiting on Parts: open
+    Waiting on Technician: open
+teams:
+  date_format: iso8601
+  body: html

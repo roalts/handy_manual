@@ -1,0 +1,175 @@
+{
+  "answer_id": "ans_example_q04",
+  "dataset_version": "ds_0026",
+  "status": "answer",
+  "asset": {
+    "asset_id": "FRS-P-0031",
+    "model": "HCP-350",
+    "serial": "HCP350-241187",
+    "firmware": "3.4",
+    "site": "FRS",
+    "site_name": "Fresno Bottling Plant",
+    "region": "NA",
+    "bulletins": [
+      {
+        "doc_id": "doc_1a07169971035ffd70cf5a81",
+        "title": "Halden SB-2025-009",
+        "status": "affected",
+        "campaign_code": null,
+        "reason": "HCP350-240001 and later: Version 2 cover, 38 N-m",
+        "citations": [
+          "p_e35d98a44e996383173e0193"
+        ]
+      }
+    ]
+  },
+  "sentences": [
+    {
+      "kind": "statement",
+      "step_number": null,
+      "segments": [
+        {
+          "kind": "text",
+          "text": "Use 38 N-m on the casing bolts, cross pattern, two passes.",
+          "review_item_id": null,
+          "page": null,
+          "page_image_passage_id": null
+        }
+      ],
+      "citations": [
+        "p_32f5ef652cfa89ebd0e95aaf",
+        "p_e35d98a44e996383173e0193"
+      ]
+    },
+    {
+      "kind": "statement",
+      "step_number": null,
+      "segments": [
+        {
+          "kind": "text",
+          "text": "FRS-P-0031 is serial HCP350-241187, inside the revised-casing range of SB-2025-009 (HCP350-240001 and later).",
+          "review_item_id": null,
+          "page": null,
+          "page_image_passage_id": null
+        }
+      ],
+      "citations": [
+        "p_e35d98a44e996383173e0193"
+      ]
+    },
+    {
+      "kind": "warning",
+      "step_number": null,
+      "segments": [
+        {
+          "kind": "text",
+          "text": "Torquing this unit to 45 N-m cracked the gasket seat in June 2026 (case 00041988).",
+          "review_item_id": null,
+          "page": null,
+          "page_image_passage_id": null
+        }
+      ],
+      "citations": [
+        "p_6ba270621506e02e89917314"
+      ]
+    }
+  ],
+  "citations": {
+    "p_32f5ef652cfa89ebd0e95aaf": {
+      "passage_id": "p_32f5ef652cfa89ebd0e95aaf",
+      "doc_id": "doc_1a07169971035ffd70cf5a81",
+      "title": "Halden SB-2025-009",
+      "doc_type": "bulletin",
+      "revision": null,
+      "issue_date": null,
+      "authority_tier": 2,
+      "locator": "p. 1, 1 Summary",
+      "viewer_url": "/sources/p_32f5ef652cfa89ebd0e95aaf",
+      "superseded": false,
+      "possibly_stale": false,
+      "ocr": false,
+      "translated": false
+    },
+    "p_e35d98a44e996383173e0193": {
+      "passage_id": "p_e35d98a44e996383173e0193",
+      "doc_id": "doc_1a07169971035ffd70cf5a81",
+      "title": "Halden SB-2025-009",
+      "doc_type": "bulletin",
+      "revision": null,
+      "issue_date": null,
+      "authority_tier": 2,
+      "locator": "p. 1, 2 Affected products",
+      "viewer_url": "/sources/p_e35d98a44e996383173e0193",
+      "superseded": false,
+      "possibly_stale": false,
+      "ocr": false,
+      "translated": false
+    },
+    "p_79e8df3857393da815e28cdf": {
+      "passage_id": "p_79e8df3857393da815e28cdf",
+      "doc_id": "doc_4d743829d1cbdd028b477127",
+      "title": "Halden HCP-350 IOM Rev D",
+      "doc_type": "service_manual",
+      "revision": "D",
+      "issue_date": null,
+      "authority_tier": 3,
+      "locator": "p. 7, 8.4 Replacing the mechanical seal",
+      "viewer_url": "/sources/p_79e8df3857393da815e28cdf",
+      "superseded": false,
+      "possibly_stale": false,
+      "ocr": false,
+      "translated": false
+    },
+    "p_6ba270621506e02e89917314": {
+      "passage_id": "p_6ba270621506e02e89917314",
+      "doc_id": "doc_0bd1ab36c93e82068dca8079",
+      "title": "Salesforce cases NA",
+      "doc_type": "case_export",
+      "revision": null,
+      "issue_date": null,
+      "authority_tier": 0,
+      "locator": "Case 00041988",
+      "viewer_url": "/sources/p_6ba270621506e02e89917314",
+      "superseded": false,
+      "possibly_stale": false,
+      "ocr": false,
+      "translated": false
+    }
+  },
+  "conflicts": [
+    {
+      "topic": "Casing bolt torque",
+      "sides": [
+        {
+          "statement": "38 N-m for HCP350-240001 and later",
+          "citations": [
+            "p_e35d98a44e996383173e0193"
+          ]
+        },
+        {
+          "statement": "45 N-m",
+          "citations": [
+            "p_79e8df3857393da815e28cdf"
+          ]
+        }
+      ],
+      "preferred": 0,
+      "reason": "The bulletin covers this serial and outranks the manual; 45 N-m applies only to serials before HCP350-240001."
+    }
+  ],
+  "notices": [
+    {
+      "kind": "bulletin",
+      "text": "SB-2025-009 applies to this unit.",
+      "citations": [
+        "p_e35d98a44e996383173e0193"
+      ]
+    }
+  ],
+  "clarification": null,
+  "restricted": null,
+  "abstain_reason": null,
+  "work_order_suggestion": null,
+  "question_used": null,
+  "timings_ms": {}
+}

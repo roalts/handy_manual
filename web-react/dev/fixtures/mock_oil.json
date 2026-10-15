@@ -1,0 +1,140 @@
+{
+  "answer_id": "ans_mock_oil",
+  "dataset_version": "ds_0026",
+  "status": "answer",
+  "asset": {
+    "asset_id": "RTM-C-0121",
+    "model": "VRS-75",
+    "serial": "VRS75-230640",
+    "firmware": "4.9",
+    "site": "RTM",
+    "site_name": "Rotterdam Distribution Hub",
+    "region": "EU",
+    "bulletins": []
+  },
+  "sentences": [
+    {
+      "kind": "statement",
+      "step_number": null,
+      "segments": [
+        {"kind": "text", "text": "Vastra SynLube 46 comes in 20 L drums, part 41-0046.", "review_item_id": null, "page": null, "page_image_passage_id": null}
+      ],
+      "citations": ["p_1c6d12456368706495f71b0d"]
+    },
+    {
+      "kind": "step",
+      "step_number": 1,
+      "segments": [
+        {"kind": "text", "text": "Check the oil type on the fleet register before you leave the shop.", "review_item_id": null, "page": null, "page_image_passage_id": null}
+      ],
+      "citations": ["p_1c6d12456368706495f71b0d"]
+    },
+    {
+      "kind": "step",
+      "step_number": 2,
+      "segments": [
+        {"kind": "text", "text": "Follow the before-maintenance checklist in section 1.4 of the service manual.", "review_item_id": null, "page": null, "page_image_passage_id": null}
+      ],
+      "citations": ["p_0ee8e5f1561408d13db4a416"]
+    },
+    {
+      "kind": "step",
+      "step_number": 3,
+      "segments": [
+        {"kind": "text", "text": "Put the waste oil in the site drum, not in the van.", "review_item_id": null, "page": null, "page_image_passage_id": null}
+      ],
+      "citations": ["p_1c6d12456368706495f71b0d"]
+    },
+    {
+      "kind": "warning",
+      "step_number": null,
+      "segments": [
+        {"kind": "text", "text": "Never mix SynLube with mineral oil.", "review_item_id": null, "page": null, "page_image_passage_id": null}
+      ],
+      "citations": ["p_1c6d12456368706495f71b0d"]
+    },
+    {
+      "kind": "statement",
+      "step_number": null,
+      "segments": [
+        {"kind": "text", "text": "DANGER marks a hazardous situation that will result in death or serious injury if not avoided.", "review_item_id": null, "page": null, "page_image_passage_id": null}
+      ],
+      "citations": ["p_01d8fc970b80aa01db626b23"]
+    }
+  ],
+  "citations": {
+    "p_1c6d12456368706495f71b0d": {
+      "passage_id": "p_1c6d12456368706495f71b0d",
+      "doc_id": "doc_7012dcde40355723e48cabc1",
+      "title": "VRS Series Oil and Filter Quick Reference",
+      "doc_type": "wiki",
+      "revision": null,
+      "issue_date": "2024-03-21",
+      "authority_tier": 4,
+      "locator": "Intervals, Oil",
+      "viewer_url": "/sources/p_1c6d12456368706495f71b0d",
+      "superseded": false,
+      "possibly_stale": true,
+      "ocr": false,
+      "translated": false
+    },
+    "p_0ee8e5f1561408d13db4a416": {
+      "passage_id": "p_0ee8e5f1561408d13db4a416",
+      "doc_id": "doc_f61d8aadf1030ed35995623b",
+      "title": "Vastra VRS-75 Service Manual Rev B",
+      "doc_type": "service_manual",
+      "revision": "B",
+      "issue_date": "2024-02-12",
+      "authority_tier": 3,
+      "locator": "p. 4, 1.4 Before maintenance and repair",
+      "viewer_url": "/sources/p_0ee8e5f1561408d13db4a416",
+      "superseded": true,
+      "possibly_stale": false,
+      "ocr": false,
+      "translated": false
+    },
+    "p_01d8fc970b80aa01db626b23": {
+      "passage_id": "p_01d8fc970b80aa01db626b23",
+      "doc_id": "doc_f61d8aadf1030ed35995623b",
+      "title": "Vastra VRS-75 Service Manual Rev B",
+      "doc_type": "service_manual",
+      "revision": "B",
+      "issue_date": "2024-02-12",
+      "authority_tier": 3,
+      "locator": "p. 3, 1.2 Signal words",
+      "viewer_url": "/sources/p_01d8fc970b80aa01db626b23",
+      "superseded": true,
+      "possibly_stale": false,
+      "ocr": false,
+      "translated": false
+    }
+  },
+  "conflicts": [
+    {
+      "topic": "Which oil to put in",
+      "sides": [
+        {"statement": "SynLube 46, part 41-0046", "citations": ["p_1c6d12456368706495f71b0d"]},
+        {"statement": "Mineral oil, if the unit is already on mineral oil, until a full flush and changeover", "citations": ["p_1c6d12456368706495f71b0d"]}
+      ],
+      "preferred": null,
+      "reason": "The oil this unit runs on is in the fleet register, not in the sources."
+    }
+  ],
+  "notices": [
+    {"kind": "superseded", "text": "Two citations are from VRS-75 Service Manual Rev B, which Rev C replaces.", "citations": ["p_01d8fc970b80aa01db626b23", "p_0ee8e5f1561408d13db4a416"]},
+    {"kind": "possibly_stale", "text": "The oil quick reference may be out of date.", "citations": ["p_1c6d12456368706495f71b0d"]}
+  ],
+  "clarification": null,
+  "restricted": null,
+  "abstain_reason": null,
+  "work_order_suggestion": {
+    "asset_id": "RTM-C-0121",
+    "fault_code": null,
+    "summary": "Oil change, confirm oil type from the fleet register",
+    "required_certification": [],
+    "parts": [],
+    "campaign_code": null,
+    "citations": ["p_1c6d12456368706495f71b0d"]
+  },
+  "timings_ms": {}
+}
